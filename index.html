@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middle East</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css"/> 
+    <link href="multiselect/css/jquery.multiselect.css" media="screen" rel="stylesheet" type="text/css">
+    <script src="https://js.arcgis.com/4.15/"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="multiselect/js/jquery.multiselect.js"></script>
+    
+</head>
+<body>
+    <div class="nav">
+        <img src="icons/addLayer.png" class="add" alt="">
+        <div class="tools item">Tools</div>
+        <div class="map item">2D</div>
+        <div class="scene item">3D</div>
+       
+       
+        <span class="container">
+           <div class="buttonContainer"><button class="removeAll">remove all</button></div> 
+            <ul class="myul">               
+            </ul>            
+        </span>              
+    </div>
+
+    <div class="toolBox">
+        <img src="icons/basemap.png" class="basemap" alt="">
+        <img src="icons/edit.png" alt="" class="edit">
+        <img src="icons/directions.png" alt="" class="directions"><br>
+        <img src="icons/draw.png" alt="" class="draw">
+        <img src="icons/attributeTable.png" alt="" class="table">
+        <img src="icons/bookmark.png" alt=""><br>
+    </div>
+ 
+    <div id="view"></div>
+     <!-- <form class="f" action="">
+            <select name="" multiple id="dropDown" style="width: 200px">
+                <option value="" > c++</option>
+                <option value="">java</option>
+                <option value="">VB</option>
+                <option value="">python</option>
+                <option value="">javascript</option>
+                <option value="">sql</option>
+            </select>
+        </form> -->
+    
+    <script src="jquery.js"></script>
+
+
+
+    <script>
+    // $(function() {
+        
+    //     var drop= $('#dropDown');
+
+    //     drop.multiselect({
+    //         column:1, placeholder:'select',selectAll:true,search:true
+    //     });
+     
+    // $(".myul").find("input[type=checkbox]").siblings().addClass('hussein');                
+    // })
+    $(".add").click(function(){
+        $('.container').slideToggle(1000);
+    })
+    $(".tools").on('click',function(){
+        $('.toolBox').slideToggle(500);
+    })
+    
+      
+    
+        
+  
+    </script>
+    <script src="code.js"></script>
+</body>
+</html>
