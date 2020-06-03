@@ -3,23 +3,42 @@
 let map,view,options,result,box,label,li,thebox,mylayer;
 let locateWidget;
 
-require(["esri/widgets/Directions","esri/widgets/Sketch","esri/widgets/Editor","esri/widgets/BasemapGallery", "esri/widgets/Search","esri/Map","esri/views/MapView","esri/layers/FeatureLayer","esri/request","esri/widgets/Home",
+require(["esri/widgets/FeatureTable","esri/views/SceneView","esri/widgets/DistanceMeasurement2D","esri/widgets/AreaMeasurement2D","esri/widgets/Directions","esri/widgets/Editor","esri/widgets/BasemapGallery", "esri/widgets/Search","esri/Map","esri/views/MapView","esri/layers/FeatureLayer","esri/request","esri/widgets/Home",
 "esri/widgets/Locate","esri/widgets/Expand","dojo/domReady!"] ,
-function(Directions,Sketch,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer,esriRequest,Home,locate,Expand){
-
-
-    //widgets   
+function(FeatureTable,SceneView,line,AreaMeasurement2D,Directions,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer,esriRequest,Home,locate,Expand){
+   
     map=new Map({basemap: 'satellite' })
     view= new MapView(
         {map:map, zoom:4,center: [45.3134765624967,24.21275956676295],container:"view" }
-    )   
+    ) 
+
+    view.ui.remove('zoom');
+    view.ui.padding = { top: 55, left: 10, right: 10, bottom: 10 }
+
+    //2d 3d
+    $('.scene').on("click",function(){
+        map.ground= "world-elevation";
+        scene=new SceneView({map:map,zoom:view.zoom, center:[view.center.longitude,view.center.latitude],
+            container:"view"})
+    });
+    $('.map').click(function(){
+        
+        view= new MapView(            
+            {map:map,zoom:view.zoom, center:[view.center.longitude,view.center.latitude],
+                container:"view"}
+        ) 
+        
+    })
+
+
+    //widgets   
     
     
         //search
         let search = new Search({view:view});
         var expandsearch = new Expand({
             expandIconClass: "esri-icon-search",
-            expandTooltip: "gps",
+            expandTooltip: "search",
             view: view,
             content: search
             });
@@ -84,6 +103,38 @@ function(Directions,Sketch,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer
                 }
             })
 
+            //measure
+            var area = new AreaMeasurement2D({
+                view: view,unit: "square-meters"
+              });
+            var line = new line({
+            view: view,unit:"metric"
+            });
+            var expandmeasure = new Expand({
+                expandIconClass: "esri-icon-measure",
+                expandTooltip: "measure",
+                view: view,
+                content: line
+            });	
+
+            var expandarea = new Expand({
+                expandIconClass: "esri-icon-measure-area",
+                expandTooltip: "measure",
+                view: view,
+                content: area
+            });	
+            $('.measure').click(function(){
+                $(this).toggleClass('active');
+                if($(this).hasClass('active')){
+                    view.ui.add([expandarea,expandmeasure],'top-left');
+                    
+                }else{
+                    view.ui.remove([expandarea,expandmeasure]);
+                    
+                }
+            })
+            
+            
 
             //directions
             // var directionsWidget = new Directions({
@@ -140,6 +191,8 @@ function(Directions,Sketch,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer
                 ,/*popupTemplate: template1*/outFields: ["*"]});
         map.addMany([lebanon,syria,iran,iraq,turkey,isreal,palestine,jordan,ksa,yemen])
 
+
+       
         
 
 
@@ -161,14 +214,18 @@ function(Directions,Sketch,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer
                 li= $("<li></li>");
                  box= $('<input type="checkbox" >');
                  label= $('<label ></label>');
+                 tablebtn=$('<button></button>');
+                 tablebtn.text('Table');
+                 tablebtn.attr('table',i);
+                 tablebtn.addClass("attrtable")
                 box.addClass('check'+result.layers[i].name);
                 box.addClass("mybox");
-                box.attr('index',result.layers[i].id)
-                box.attr('id','box'+result.layers[i].id)              
+                box.attr('index',result.layers[i].id);
+                box.attr('id','box'+result.layers[i].id);             
                 label.text(result.layers[i].name);label.addClass(result.layers[i].name);
-                label.attr('num',result.layers[i].id)
-                label.addClass('mylabel')
-                li.append(box); li.append(label);
+                label.attr('num',result.layers[i].id);
+                label.addClass('mylabel');
+                li.append(tablebtn); li.append(box); li.append(label);
                 ul.append(li);              
             }   
 
@@ -192,15 +249,44 @@ function(Directions,Sketch,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer
                 
                 })
                
-            });
-
-          
+            });       
         
             
-
             $('.removeAll').click (function(){
                 map.removeAll();
+                $("input[type='checkbox']").prop("checked",false)
             })
+
+
+             //ATTRIBUTES table
+           $('.attrtable').each(function(){
+            
+            $(this).click(function(){
+                $("#tableDiv").children().remove();
+                $("#tableDiv").slideDown(500);
+               var c=$(this).attr('table');
+                $(this).toggleClass("activeT");
+                if($(this).hasClass('activeT')){
+                    $(this).css("border","3px solid black")
+                    Tlayer=new FeatureLayer({ 
+                        url: "https://services9.arcgis.com/BwlqFPXTnyyoy8fL/ArcGIS/rest/services/MiddleEast/FeatureServer/"+c+"?f=pjson&token=JdeFYHAVcgVdq4juH9CoT9fKCW8Ja8aUHNplJiSVdG5lmgkwds4PsuU2XOXvNWkc7teP2bJ7YFtMfHA6pcSV9AqGm4X8txj532LcqRMVSHjuhUrPqzSNutc-iS27JIClmtRlPanI8_K9WRhhEF2de4DMOE-Ra7OOyPVOYeYLiWAic6LIccuijO8US-iauDIsOO__6G_sxiA1GimmxEbJQ2oOt6MEY6Z6YwP2yXVAQJ3z7VW8sRxWwnYQhoCvudfnC5_OYEhJtjwQV2dc_qslTg.."
+                        ,/*popupTemplate: template1*/outFields: ["*"]});
+                    
+                        const featureTable = new FeatureTable({
+                            layer: Tlayer,
+                            container: "tableDiv"
+                          });
+
+
+                }else{ $("#tableDiv").children().remove();
+                $("#tableDiv").slideUp(500);
+                $(this).css("border","")
+                        }
+
+            })           
+           }) 
+        
+
             // $('label').each(function () {
             //     $(this).dblclick(function () {
             //       let b= $(this).attr('num');

@@ -28,15 +28,17 @@
     </div>
 
     <div class="toolBox">
-        <img src="icons/basemap.png" class="basemap" alt="">
+        <img src="icons/basemap.png" class="basemap" alt=""> 
         <img src="icons/edit.png" alt="" class="edit">
-        <img src="icons/directions.png" alt="" class="directions"><br>
+        <img src="icons/measurement.png" alt="" class="measure"><br>
+        <img src="icons/directions.png" alt="" class="directions">
         <img src="icons/draw.png" alt="" class="draw">
-        <img src="icons/attributeTable.png" alt="" class="table">
+        
         <img src="icons/bookmark.png" alt=""><br>
     </div>
  
     <div id="view"></div>
+    <div id="tableDiv"></div>
      <!-- <form class="f" action="">
             <select name="" multiple id="dropDown" style="width: 200px">
                 <option value="" > c++</option>
@@ -64,11 +66,17 @@
     // $(".myul").find("input[type=checkbox]").siblings().addClass('hussein');                
     // })
     $(".add").click(function(){
-        $('.container').slideToggle(1000);
+        $('.container').slideToggle(500);
+        $(".toolBox").slideUp();
     })
     $(".tools").on('click',function(){
         $('.toolBox').slideToggle(500);
+        $(".container").slideUp();
     })
+    $(".nav").children().css({
+        cursor: "pointer"
+    })
+    $("#tableDiv").slideUp(500);
     
       
     
