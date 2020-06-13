@@ -65,3 +65,8 @@ body,html,#view {
     height:250px;
     bottom:0px
     }
+    #search{       
+        float:right;
+        height:30px;
+        margin:5px;
+    }

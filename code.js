@@ -3,9 +3,9 @@
 let map,view,options,result,box,label,li,thebox,mylayer;
 let locateWidget;
 
-require(["esri/widgets/FeatureTable","esri/views/SceneView","esri/widgets/DistanceMeasurement2D","esri/widgets/AreaMeasurement2D","esri/widgets/Directions","esri/widgets/Editor","esri/widgets/BasemapGallery", "esri/widgets/Search","esri/Map","esri/views/MapView","esri/layers/FeatureLayer","esri/request","esri/widgets/Home",
+require(["esri/widgets/Fullscreen","esri/widgets/FeatureTable","esri/views/SceneView","esri/widgets/DistanceMeasurement2D","esri/widgets/AreaMeasurement2D","esri/widgets/Editor","esri/widgets/BasemapGallery", "esri/widgets/Search","esri/Map","esri/views/MapView","esri/layers/FeatureLayer","esri/request","esri/widgets/Home",
 "esri/widgets/Locate","esri/widgets/Expand","dojo/domReady!"] ,
-function(FeatureTable,SceneView,line,AreaMeasurement2D,Directions,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer,esriRequest,Home,locate,Expand){
+function(Fullscreen,FeatureTable,SceneView,line,AreaMeasurement2D,Editor,BasemapGallery,Search,Map,MapView,FeatureLayer,esriRequest,Home,locate,Expand){
    
     map=new Map({basemap: 'satellite' })
     view= new MapView(
@@ -13,7 +13,7 @@ function(FeatureTable,SceneView,line,AreaMeasurement2D,Directions,Editor,Basemap
     ) 
 
     view.ui.remove('zoom');
-    view.ui.padding = { top: 55, left: 10, right: 10, bottom: 10 }
+    view.ui.padding = { top: 55, left: 10, right: 10, bottom: 10 };
 
     //2d 3d
     $('.scene').on("click",function(){
@@ -33,16 +33,25 @@ function(FeatureTable,SceneView,line,AreaMeasurement2D,Directions,Editor,Basemap
 
     //widgets   
     
+
+
+        //FULLSCREEN
+        fullscreen = new Fullscreen({
+            view: view
+          });
+          view.ui.add(fullscreen, "top-right"); 
     
         //search
-        let search = new Search({view:view});
+        let search = new Search({
+            view:view,container:"search"
+        });
         var expandsearch = new Expand({
             expandIconClass: "esri-icon-search",
             expandTooltip: "search",
             view: view,
-            content: search
+            content: search,
             });
-            view.ui.add(expandsearch,"top-right")
+            //view.ui.add(expandsearch,"top-right")
              
             var homeWidget = new Home({
             view: view
@@ -132,30 +141,7 @@ function(FeatureTable,SceneView,line,AreaMeasurement2D,Directions,Editor,Basemap
                     view.ui.remove([expandarea,expandmeasure]);
                     
                 }
-            })
-            
-            
-
-            //directions
-            // var directionsWidget = new Directions({
-            //     view: view, routeServiceUrl:
-            //     "https://utility.arcgis.com/usrsvcs/appservices/srsKxBIxJZB0pTZ0/rest/services/World/Route/NAServer/Route_World"
-            //   });             
-            // var expand8 = new Expand({
-            //     expandIconClass: "esri-icon-directions",
-            //     expandTooltip: "edit",
-            //     view: view,
-            //     content: directionsWidget})
-            // $('.directions').click(function(){
-            //                 $(this).toggleClass('active');
-            //                 if($(this).hasClass('active')){
-            //                     view.ui.add(expand8,'top-left');
-                                
-            //                 }else{
-            //                     view.ui.remove(expand8);
-                                
-            //                 }
-            //             })
+            }) ;                              
             
 
         let lebanon= new FeatureLayer({ 
@@ -189,7 +175,7 @@ function(FeatureTable,SceneView,line,AreaMeasurement2D,Directions,Editor,Basemap
             let isreal= new FeatureLayer({ 
                 url: "https://services9.arcgis.com/BwlqFPXTnyyoy8fL/ArcGIS/rest/services/MiddleEast/FeatureServer/25?f=pjson&token=JdeFYHAVcgVdq4juH9CoT9fKCW8Ja8aUHNplJiSVdG5lmgkwds4PsuU2XOXvNWkc7teP2bJ7YFtMfHA6pcSV9AqGm4X8txj532LcqRMVSHjuhUrPqzSNutc-iS27JIClmtRlPanI8_K9WRhhEF2de4DMOE-Ra7OOyPVOYeYLiWAic6LIccuijO8US-iauDIsOO__6G_sxiA1GimmxEbJQ2oOt6MEY6Z6YwP2yXVAQJ3z7VW8sRxWwnYQhoCvudfnC5_OYEhJtjwQV2dc_qslTg.."
                 ,/*popupTemplate: template1*/outFields: ["*"]});
-        map.addMany([lebanon,syria,iran,iraq,turkey,isreal,palestine,jordan,ksa,yemen])
+        map.addMany([lebanon,syria,iran,iraq,turkey,isreal,palestine,jordan,ksa,yemen]);
 
 
        
