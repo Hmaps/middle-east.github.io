@@ -13,13 +13,15 @@ function(Fullscreen,FeatureTable,SceneView,line,AreaMeasurement2D,Editor,Basemap
     ) 
 
     view.ui.remove('zoom');
-    view.ui.padding = { top: 55, left: 10, right: 10, bottom: 10 };
+   
 
     //2d 3d
     $('.scene').on("click",function(){
         map.ground= "world-elevation";
         scene=new SceneView({map:map,zoom:view.zoom, center:[view.center.longitude,view.center.latitude],
-            container:"view"})
+            container:"view"});
+            
+        
     });
     $('.map').click(function(){
         
